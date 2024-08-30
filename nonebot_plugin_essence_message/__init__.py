@@ -13,7 +13,7 @@ from nonebot.plugin import PluginMetadata
 from nonebot import require
 
 require("nonebot_plugin_alconna")
-from arclet.alconna import Alconna, Args, Subcommand, Option
+from arclet.alconna import Alconna, Args, Subcommand
 from nonebot_plugin_alconna import AlconnaMatch, Match, Query, on_alconna
 
 from .Helper import fetchpic, format_msg, reach_limit, get_name, trigger_rule, db
@@ -61,7 +61,7 @@ async def _(event: NoticeEvent, bot: Bot):
                     msg = {"message": essence["content"]}
                     break
         msg = await format_msg(msg, bot)
-        if msg == None:
+        if msg is None:
             essence_set.finish(MessageSegment.text("呜呜"))
         data = [
             event.time,
@@ -82,7 +82,7 @@ async def _(event: NoticeEvent, bot: Bot):
                     msg = {"message": essence["content"]}
                     break
         msg = await format_msg(msg, bot)
-        if msg == None:
+        if msg is None:
             essence_set.finish(MessageSegment.text("呜呜"))
         data = [
             event.time,
@@ -117,7 +117,7 @@ async def random_cmd(event: GroupMessageEvent, bot: Bot):
     if reach_limit(event.get_session_id()):
         await essence_cmd.finish("过量抽精华有害身心健康")
     msg = await db.random_essence(event.group_id)
-    if msg == None:
+    if msg is None:
         await essence_cmd.finish(MessageSegment.text("目前数据库里没有精华消息，可以使用essence fetchall抓取群里的精华消息"))
     if msg[4] == "text":
         await essence_cmd.finish(
@@ -219,7 +219,7 @@ async def export_cmd(event: GroupMessageEvent, bot: Bot):
         await bot.upload_group_file(
             group_id=event.group_id, file=path, name="essence.db"
         )
-        await essence_cmd.finish(f"请检查群文件")
+        await essence_cmd.finish("请检查群文件")
     except:
         pass
     

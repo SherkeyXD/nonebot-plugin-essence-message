@@ -114,6 +114,7 @@ async def help_cmd():
 
 @essence_cmd.dispatch("random").handle()
 async def random_cmd(event: GroupMessageEvent, bot: Bot):
+    reply = MessageSegment.reply(_id=event.sender_id)
     if reach_limit(event.get_session_id()):
         await essence_cmd.finish("过量抽精华有害身心健康")
     msg = await db.random_essence(event.group_id)
@@ -121,12 +122,13 @@ async def random_cmd(event: GroupMessageEvent, bot: Bot):
         await essence_cmd.finish(MessageSegment.text("目前数据库里没有精华消息，可以使用essence fetchall抓取群里的精华消息"))
     if msg[4] == "text":
         await essence_cmd.finish(
+            reply +
             MessageSegment.text(
-                f"{await get_name(bot, event.group_id,msg[2])}:{msg[5]}"
+                f"{await get_name(bot,event.group_id,msg[2])}:{msg[5]}"
             )
         )
     elif msg[4] == "image":
-        await essence_cmd.finish(MessageSegment.image(file=msg[5]))
+        await essence_cmd.finish(reply+MessageSegment.image(file=msg[5]))
 
 
 @essence_cmd.dispatch("search").handle()
